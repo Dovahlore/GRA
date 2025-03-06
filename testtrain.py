@@ -24,7 +24,7 @@ from compose.train.dataset import CustomGraphDataset
 from torch.nn.parallel import DataParallel
 def load_dataset(args):
     # 每个样本：Data(x=[32, 9], edge_index=[2, 68], edge_attr=[68, 3], smiles='OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)C(O)C3O ', y=[1, 1])
-    dataset = CustomGraphDataset(root='./Datasets/CustomGraphDataset49')
+    dataset = CustomGraphDataset(root='./compose/train/Datasets/CustomGraphDataset49')
 
     # 1128个样本用于graph-level prediction 训练：902；测试：226
 
