@@ -162,7 +162,7 @@ class Graphormer(nn.Module):
         for layer in self.layers:
             x = layer(x, edge_attr, b, edge_paths, ptr)
 
-        x = self.node_out_lin(x,device=x.device)
+        x = self.node_out_lin(x)
 
 
 
