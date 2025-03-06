@@ -34,21 +34,22 @@ def load_dataset(args):
 
     print("Sample Data Example:", dataset[0])  # 打印第一个样本，确保数据格式正确
 
-    train_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=True, num_workers=6)
-    test_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=False, num_workers=6)
+    train_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=True, num_workers=0)
+    test_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=False, num_workers=0)
 
     return train_loader, test_loader, dataset.num_node_features, dataset.num_edge_features
 def train(args, IO, train_loader, num_node_features, num_edge_features):
     # 使用GPU or CPU
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     if torch.cuda.is_available():
         num_gpus = torch.cuda.device_count()
         print(f"可用GPU数量: {num_gpus}")
 
     model = Graphormer(args, num_node_features, num_edge_features)
 
-    model = nn.DataParallel(model)  # 使用 DataParallel 让多个 GPU 计算
-    model.to(device)
+    model = torch.nn.DataParallel(model, device_ids=[0, 1])  # Example for using two GPUs
+    model = model.cuda()
+
 
     if args.gpu_index < 0:
         IO.cprint('Using CPU')
@@ -74,11 +75,12 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
     criterion = nn.L1Loss(reduction="sum")
     lowest_loss=float('inf')
     epochs = trange(args.epochs, leave=True, desc="Epochs")
+    model.train()
     for epoch in epochs:
         #################
         ###   Train   ###
         #################
-        model.train()  # 训练模式
+         # 训练模式
         train_loss = 0.0  # 一个epoch，所有样本损失总和
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)
