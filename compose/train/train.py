@@ -26,7 +26,7 @@ from compose.train.dataset import CustomGraphDataset
 
 
 def load_dataset(args):
-    dataset = CustomGraphDataset(root='./Datasets/CustomGraphDataset49')
+    dataset = CustomGraphDataset(root='compose/train/Datasets/CustomGraphDataset49')
 
     print(f"Dataset Size: {len(dataset)}")
     if len(dataset) == 0:
