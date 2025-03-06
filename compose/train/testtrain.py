@@ -2,9 +2,13 @@
 
 import sys,random
 
-sys.path.append("../..")
-import os
 
+import os
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# 将项目根目录添加到 sys.path
+project_root = os.path.abspath(os.path.join(current_directory, '..'))
+sys.path.append(project_root)
 # 指定工作目录
 
 # 指定工作目录
