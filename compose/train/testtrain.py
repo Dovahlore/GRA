@@ -93,9 +93,6 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
             loss.backward()
             nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=1.0)
             optimizer.step()
-
-
-
             train_loss += loss.item()
         if train_loss/len(train_loader.dataset)<lowest_loss:
             lowest_loss=train_loss/len(train_loader.dataset)
