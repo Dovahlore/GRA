@@ -91,8 +91,8 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
             train_loss += loss.item()
         if train_loss/len(train_loader.dataset)<lowest_loss:
             lowest_loss=train_loss/len(train_loader.dataset)
-            torch.save(model, 'outputs/%s/model.pth' % args.exp_name)
-            IO.cprint('The current best model is saved in: {}'.format('******** outputs/%s/model.pth *********' % args.exp_name))
+            torch.save(model, 'outputs/%s/best.pth' % args.exp_name)
+            IO.cprint('The current best model is saved in: {}'.format('******** outputs/%s/best.pth *********' % args.exp_name))
 
         IO.cprint('Epoch #{:03d}, Train_Loss: {:.6f}'.format(epoch, train_loss / len(train_loader.dataset)))
 
