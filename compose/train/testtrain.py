@@ -9,7 +9,7 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 # 将项目根目录添加到 sys.path
 project_root = os.path.abspath(os.path.join(current_directory, '../..'))
 sys.path.append(project_root)
-print('sys.path:', sys.path)
+
 # 指定工作目录
 
 # 指定工作目录
@@ -23,11 +23,16 @@ from torch_geometric.loader import DataLoader
 from compose.Graphormer.model import Graphormer
 from compose.train.dataset import CustomGraphDataset
 from torch.nn.parallel import DataParallel
+
+
 def load_dataset(args):
-    # 每个样本：Data(x=[32, 9], edge_index=[2, 68], edge_attr=[68, 3], smiles='OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)C(O)C3O ', y=[1, 1])
     dataset = CustomGraphDataset(root='compose/train/Datasets/CustomGraphDataset49')
 
-    # 1128个样本用于graph-level prediction 训练：902；测试：226
+    print(f"Dataset Size: {len(dataset)}")
+    if len(dataset) == 0:
+        raise ValueError("Dataset is empty. Please check the dataset path and format.")
+
+    print("Sample Data Example:", dataset[0])  # 打印第一个样本，确保数据格式正确
 
     train_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=True, num_workers=6)
     test_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=False, num_workers=6)
@@ -41,16 +46,15 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         print(f"可用GPU数量: {num_gpus}")
     device_ids = list(range( torch.cuda.device_count()))
     model = Graphormer(args, num_node_features, num_edge_features)
-    model = DataParallel(model, device_ids=device_ids).to(device_ids[0])
-    model.cuda()
+
 
     if args.gpu_index < 0:
         IO.cprint('Using CPU')
     else:
 
-        if torch.cuda.device_count() > 1:  # 检查电脑是否有多块GPU
-            print(f"Let's use {torch.cuda.device_count()} GPUs!")
-            model = nn.DataParallel(model)
+        if torch.cuda.device_count() > 1:
+            print(f"Using {torch.cuda.device_count()} GPUs!")
+            model = nn.DataParallel(model).cuda()  # 确保 model 被移动到 GPU
         IO.cprint('Using GPU: {}'.format(args.gpu_index))
         torch.cuda.manual_seed(args.seed)  # 设置PyTorch GPU随机种子
 
@@ -74,16 +78,17 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         #################
         model.train()  # 训练模式
         train_loss = 0.0  # 一个epoch，所有样本损失总和
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model.to(device)
 
         for i, data in tqdm(enumerate(train_loader), total=len(train_loader), desc="Train_Loader"):
-            data = data.cuda()
+            data = data.to(device)  # 确保数据在正确的设备上
             optimizer.zero_grad()
-            outputs = model(data)
-            loss = criterion(outputs, data.y)
+            outputs = model(data)  # 前向传播
+            loss = criterion(outputs, data.y.to(device))  # 计算损失，确保标签也在 GPU 上
             loss.backward()
-            nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=1.0) # 剪裁可迭代参数的梯度范数，防止梯度爆炸
+            nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=1.0)
             optimizer.step()
-
 
 
 
@@ -164,6 +169,10 @@ if __name__ == '__main__':
     IO.cprint(str(table_printer(args)))  # 参数可视化
 
     train_loader, test_loader, num_node_features, num_edge_features = load_dataset(args)
+
+    print(f"num_node_features: {num_node_features}, num_edge_features: {num_edge_features}")
+    if num_node_features is None or num_edge_features is None:
+        raise ValueError("num_node_features or num_edge_features is None. Check dataset implementation.")
     print("num_node_features:", num_node_features, "num_edge_features:", num_edge_features)
     train(args, IO, train_loader, num_node_features, num_edge_features)
     test(args, IO, test_loader)
