@@ -22,7 +22,7 @@ import torch
 from torch_geometric.loader import DataLoader
 from compose.Graphormer.model import Graphormer
 from compose.train.dataset import CustomGraphDataset
-from torch.nn.parallel import DataParallel
+
 
 
 def load_dataset(args):
@@ -40,13 +40,15 @@ def load_dataset(args):
     return train_loader, test_loader, dataset.num_node_features, dataset.num_edge_features
 def train(args, IO, train_loader, num_node_features, num_edge_features):
     # 使用GPU or CPU
-
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.is_available():
         num_gpus = torch.cuda.device_count()
         print(f"可用GPU数量: {num_gpus}")
-    device_ids = list(range( torch.cuda.device_count()))
+
     model = Graphormer(args, num_node_features, num_edge_features)
 
+    model = nn.DataParallel(model)  # 使用 DataParallel 让多个 GPU 计算
+    model.to(device)
 
     if args.gpu_index < 0:
         IO.cprint('Using CPU')
@@ -108,7 +110,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
 def test(args, IO, test_loader):
     """测试模型"""
 
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
     # 输出内容保存在之前的训练日志里
