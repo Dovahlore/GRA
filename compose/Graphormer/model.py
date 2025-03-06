@@ -139,12 +139,12 @@ class Graphormer(nn.Module):
         :param data: input graph of batch of graphs
         :return: torch.Tensor, output node embeddings
         """
-        device = next(self.parameters()).device
+
 
         # 确保数据在同一设备上
-        x = data.x.float().to(device)
-        edge_index = data.edge_index.long().to(device)
-        edge_attr = data.edge_attr.float().to(device)
+        x = data.x.float()
+        edge_index = data.edge_index.long()
+        edge_attr = data.edge_attr.float()
 
         if type(data) == Data:
             ptr = None
