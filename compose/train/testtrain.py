@@ -130,6 +130,7 @@ def test(args, IO, test_loader):
     criterion = nn.L1Loss(reduction="sum")
 
     for i, data in tqdm(enumerate(test_loader), total=len(test_loader), desc="Test_Loader"):
+        print(f"x.shape: {data.x.shape}")
         data = data.to(device)
         with torch.no_grad():
             outputs = model(data)
