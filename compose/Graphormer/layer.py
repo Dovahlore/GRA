@@ -64,6 +64,9 @@ class SpatialEncoding(nn.Module):
         :param paths: pairwise node paths
         :return: torch.Tensor, spatial Encoding matrix
         """
+        device = x.device  # 获取输入数据的设备
+        self.b = self.b.to(device)  # 确保 self.b 在 GPU 上
+        self.max_path_distance = self.max_path_distance.to(device)  # 确保 max_path_distance 在 GPU 上
         spatial_matrix = torch.zeros((x.shape[0], x.shape[0]), device=x.device)
  # (num_nodes, num_nodes)
 
@@ -91,6 +94,8 @@ class EdgeEncoding(nn.Module):
         :param edge_paths: pairwise node paths in edge indexes
         :return: torch.Tensor, Edge Encoding matrix
         """
+        self.edge_vector = self.edge_vector.to(x.device)  # 确保 edge_vector 在 GPU 上
+        self.max_path_distance = self.max_path_distance.to(x.device)  # 确保 max_path_distance 在 GPU 上
         cij = torch.zeros((x.shape[0], x.shape[0]), device=x.device)
 
         for src in edge_paths:
