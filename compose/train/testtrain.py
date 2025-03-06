@@ -50,16 +50,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
     model = torch.nn.DataParallel(model, device_ids=[0, 1])  # Example for using two GPUs
     model = model.cuda()
 
-
-    if args.gpu_index < 0:
-        IO.cprint('Using CPU')
-    else:
-
-        if torch.cuda.device_count() > 1:
-            print(f"Using {torch.cuda.device_count()} GPUs!")
-            model = nn.DataParallel(model).cuda()  # 确保 model 被移动到 GPU
-        IO.cprint('Using GPU: {}'.format(args.gpu_index))
-        torch.cuda.manual_seed(args.seed)  # 设置PyTorch GPU随机种子
+    torch.cuda.manual_seed(args.seed)  # 设置PyTorch GPU随机种子
 
     # 加载模型及参数量统计
 
