@@ -1,0 +1,23 @@
+version: "3"
+
+volumes: # 自定义数据卷
+  simulation_vol:
+    driver: local
+    driver_opts:
+      device: ./compose
+      o: bind
+      type: none
+services:
+
+  simulation:
+    build: ./compose
+    container_name: simulation
+    working_dir: /simulation
+
+    volumes:
+      - ./compose:/simulation
+      - simulation_vol:/simulation
+    #  - ./compose/uwsgi:/tmp # 挂载uwsgi日志
+    restart: always
+    tty: true
+    stdin_open: true

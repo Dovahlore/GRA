@@ -1,0 +1,247 @@
+#planner
+planner:
+  plan_path: "plan2.json"
+#logger
+logger:
+  log_path: "logs/"
+# env
+env:
+  Antenna_num: 8
+  Antennas:
+    - name: "天线-01"
+      antenna_id: "01"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna01_unit_adj_config.json"
+      config_file_path: "config/antenna01_config.json"
+      type: "2"
+    - name: "天线-02"
+      antenna_id: "02"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna02_unit_adj_config.json"
+      config_file_path: "config/antenna02_config.json"
+      type: "2"
+    - name: "天线-03"
+      antenna_id: "03"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna03_unit_adj_config.json"
+      config_file_path: "config/antenna03_config.json"
+      type: "2"
+    - name: "天线-04"
+      antenna_id: "04"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna04_unit_adj_config.json"
+      config_file_path: "config/antenna04_config.json"
+      type: "2"
+    - name: "天线-05"
+      antenna_id: "05"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna05_unit_adj_config.json"
+      config_file_path: "config/antenna05_config.json"
+      type: "2"
+    - name: "天线-06"
+      antenna_id: "06"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna06_unit_adj_config.json"
+      config_file_path: "config/antenna06_config.json"
+      type: "2"
+    - name: "天线-07"
+      antenna_id: "07"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna07_unit_adj_config.json"
+      config_file_path: "config/antenna07_config.json"
+      type: "2"
+    - name: "天线-08"
+      antenna_id: "08"
+      suface_num: 60
+      unit_num: 2700
+      adj_file_path: "config/antenna08_unit_adj_config.json"
+      config_file_path: "config/antenna08_config.json"
+      type: "2"
+  Server_num: 10
+  Servers:
+    - id: "服务器-01"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-02"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-03"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-04"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-05"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-08"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-07"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-08"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-09"
+      cpu_core_num: 180
+      GPU_num: 8
+    - id: "服务器-10"
+      cpu_core_num: 180
+      GPU_num: 8
+Tasks:
+  1:
+    task_name: "卫星测控"
+    beams:
+      R_beam_num: 1
+      T_beam_num: 1
+    meta_tasks:
+      - meta_task_type: 1
+        meta_task_name: "元任务1"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 2
+        meta_task_name: "元任务2"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 3
+        meta_task_name: "元任务1"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 4
+        meta_task_name: "元任务4"
+        core: 2
+        GPU: 2
+        depends:
+          - 3
+        repels:
+          -
+  2:
+    task_name: "卫星数传"
+    beams:
+      R_beam_num: 1
+      T_beam_num: 0
+    meta_tasks:
+      - meta_task_type: 5
+        meta_task_name: "元任务1"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 6
+        meta_task_name: "元任务2"
+        core: 5
+        GPU: 0
+        depends:
+          - 5
+        repels:
+          -
+      - meta_task_type: 7
+        meta_task_name: "元任务3"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 8
+        meta_task_name: "元任务4"
+        core: 1
+        GPU: 1
+        depends:
+          -
+        repels:
+          -
+  3:
+    task_name: "无人机通信"
+    beams:
+      R_beam_num: 1
+      T_beam_num: 1
+    meta_tasks:
+      - meta_task_type: 9
+        meta_task_name: "元任务1"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 10
+        meta_task_name: "元任务2"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+      - meta_task_type: 11
+        meta_task_name: "元任务3"
+        core: 5
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+  5:
+    task_name: "有源定位"
+    beams:
+      R_beam_num: 3
+      T_beam_num: 1
+    meta_tasks:
+      - meta_task_type: 17
+        meta_task_name: "元任务1"
+        core: 15
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
+  6:
+    task_name: "无源定位"
+    beams:
+      R_beam_num: 4
+      T_beam_num: 0
+    meta_tasks:
+      - meta_task_type: 18
+        meta_task_name: "元任务1"
+        core: 15
+        GPU: 0
+        depends:
+          -
+        repels:
+            -
+  7:
+    task_name: "干扰感知"
+    beams:
+      R_beam_num: -1
+      T_beam_num: 0
+    meta_tasks:
+      - meta_task_type: 19
+        meta_task_name: "元任务1"
+        core: 15
+        GPU: 0
+        depends:
+          -
+        repels:
+          -
