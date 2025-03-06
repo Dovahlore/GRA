@@ -46,9 +46,13 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         print(f"可用GPU数量: {num_gpus}")
 
     model = Graphormer(args, num_node_features, num_edge_features)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    model = torch.nn.DataParallel(model, device_ids=[0, 1])  # Example for using two GPUs
-    model = model.cuda()
+    if torch.cuda.device_count() > 1:
+        model = torch.nn.DataParallel(model)
+
+
+    model.to(device)  # 确保模型在正确的设备上
 
     torch.cuda.manual_seed(args.seed)  # 设置PyTorch GPU随机种子
 
