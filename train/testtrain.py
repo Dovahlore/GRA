@@ -21,12 +21,12 @@ from Graphormer.parameter import parse_args, IOStream, table_printer
 import torch
 from torch_geometric.loader import DataLoader
 from Graphormer.model import Graphormer
-from dataset import CustomGraphDataset
+from .dataset  import CustomGraphDataset
 
 
 
 def load_dataset(args):
-    dataset = CustomGraphDataset(root='./Datasets/CustomGraphDataset49')
+    dataset = CustomGraphDataset(root='./train/Datasets/CustomGraphDataset49')
 
     print(f"Dataset Size: {len(dataset)}")
     if len(dataset) == 0:
