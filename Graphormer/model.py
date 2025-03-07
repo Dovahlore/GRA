@@ -17,7 +17,7 @@ from torch_geometric.data import Data
 from torch_geometric.nn import global_mean_pool
 from torch_geometric.utils.convert import to_networkx
 
-from compose.Graphormer.layer import GraphormerEncoderLayer, CentralityEncoding, SpatialEncoding
+from Graphormer.layer import GraphormerEncoderLayer, CentralityEncoding, SpatialEncoding
 
 
 def floyd_warshall_source_to_all(G, source, cutoff=None):

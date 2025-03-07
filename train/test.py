@@ -1,30 +1,18 @@
 
 # -*- coding: utf-8 -*-
-from torch_geometric.datasets import Planetoid
+
 import os, torch, random
-from tqdm import tqdm, trange
+from tqdm import tqdm
 import torch.nn as nn
-import torch.optim as optim
-from compose.Graphormer.data import load_ESOL
-from compose.Graphormer.parameter import parse_args, IOStream, table_printer
+from Graphormer.parameter import parse_args, IOStream, table_printer
 import torch
-
-import os
-import torch
-from torch_geometric.data import InMemoryDataset, Data
-import pickle
-
-
 from torch_geometric.loader import DataLoader
-
-
-from compose.Graphormer.model import Graphormer
-from compose.train.dataset import CustomGraphDataset
+from train.dataset import CustomGraphDataset
 from sklearn.model_selection import train_test_split
 
 def load_dataset(args):
     # 每个样本：Data(x=[32, 9], edge_index=[2, 68], edge_attr=[68, 3], smiles='OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)C(O)C3O ', y=[1, 1])
-    dataset = CustomGraphDataset(root='./Datasets/CustomGraphDataset')
+    dataset = CustomGraphDataset(root='./Datasets/CustomGraphDataset49')
 
     # 1128个样本用于graph-level prediction 训练：902；测试：226
     train_dataset,test_dataset = train_test_split(dataset, test_size=0.2, random_state=args.seed)
