@@ -145,7 +145,7 @@ class Graphormer(nn.Module):
         x = data.x.float()
         x = x.to(self.node_in_lin.weight.device)
         edge_index = data.edge_index.long()
-        edge_attr = data.edge_attr.float()
+        edge_attr = data.edge_attr.float().to(self.edge_in_lin.weight.device)
 
         if type(data) == Data:
             ptr = None

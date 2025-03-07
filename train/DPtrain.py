@@ -47,7 +47,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
 
     model = Graphormer(args, num_node_features, num_edge_features)
     model.train()
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs!")
