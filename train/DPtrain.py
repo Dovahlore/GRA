@@ -89,6 +89,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
             data = data.to(device)  # Move data to the correct device
             optimizer.zero_grad()
             outputs = model(data)  # No need to call .to(device) on outputs
+            print(f"outputs.shape: {outputs.shape}，data.y.shape: {data.y.shape}")
             loss = criterion(outputs, data.y)  # No need to call .to(device) on data.y
             loss.backward()
             nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=1.0)
