@@ -86,10 +86,10 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
 
 
         for i, data in tqdm(enumerate(train_loader), total=len(train_loader), desc="Train_Loader"):
-            data = data.to(device)  # 确保数据在正确的设备上
+            data = data.to(device)  # Move data to the correct device
             optimizer.zero_grad()
-            outputs = model(data).to(device)  # 前向传播
-            loss = criterion(outputs, data.y.to(device))  # 计算损失，确保标签也在 GPU 上
+            outputs = model(data)  # No need to call .to(device) on outputs
+            loss = criterion(outputs, data.y)  # No need to call .to(device) on data.y
             loss.backward()
             nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=1.0)
             optimizer.step()
