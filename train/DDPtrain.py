@@ -22,7 +22,8 @@ import torch
 from torch_geometric.loader import DataLoader
 from Graphormer.model import Graphormer
 from .dataset  import CustomGraphDataset
-
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
 
 
 def load_dataset(args):
@@ -46,8 +47,12 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         print(f"可用GPU数量: {num_gpus}")
 
     model = Graphormer(args, num_node_features, num_edge_features)
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
+    model.train()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    dist.init_process_group(backend='nccl')  # ✅ 初始化分布式
+    device_id = rank % torch.cuda.device_count()  # ✅ 让每个进程使用不同 GPU
+    model.to(device_id)  # ✅ 只移动到当前 GPU
+    model = DDP(model, device_ids=[device_id])  # ✅ `DDP` 代替 `DataParallel`
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs!")
         model = model.to(device)
@@ -75,7 +80,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
     criterion = nn.L1Loss(reduction="sum")
     lowest_loss=float('inf')
     epochs = trange(args.epochs, leave=True, desc="Epochs")
-    model.train()
+
     for epoch in epochs:
         #################
         ###   Train   ###

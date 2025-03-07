@@ -143,6 +143,7 @@ class Graphormer(nn.Module):
 
         # 确保数据在同一设备上
         x = data.x.float()
+        x = x.to(self.node_in_lin.weight.device)
         edge_index = data.edge_index.long()
         edge_attr = data.edge_attr.float()
 
