@@ -140,12 +140,13 @@ class Graphormer(nn.Module):
         :return: torch.Tensor, output node embeddings
         """
 
+        device = self.node_in_lin.weight.device  # ✅ 获取 `Linear` 层的设备
 
         # 确保数据在同一设备上
-        x = data.x.float()
-        x = x.to(self.node_in_lin.weight.device)
-        edge_index = data.edge_index.long()
-        edge_attr = data.edge_attr.float().to(self.edge_in_lin.weight.device)
+        x = data.x.float().to(device)
+
+        edge_index = data.edge_index.long().to(device)
+        edge_attr = data.edge_attr.float().to(device)
 
         if type(data) == Data:
             ptr = None
@@ -154,16 +155,16 @@ class Graphormer(nn.Module):
             ptr = data.ptr
             node_paths, edge_paths = batched_shortest_path_distance(data)
 
-        x = self.node_in_lin(x)
-        edge_attr = self.edge_in_lin(edge_attr)
+        x = self.node_in_lin(x).to(device)
+        edge_attr = self.edge_in_lin(edge_attr).to(device)
 
-        x = self.centrality_encoding(x, edge_index)
-        b = self.spatial_encoding(x, node_paths)
+        x = self.centrality_encoding(x, edge_index).to(device)
+        b = self.spatial_encoding(x, node_paths).to(device)
 
         for layer in self.layers:
-            x = layer(x, edge_attr, b, edge_paths, ptr)
+            x = layer(x, edge_attr, b, edge_paths, ptr).to(device)
 
-        x = self.node_out_lin(x)
+        x = self.node_out_lin(x).to(device)
 
 
 
