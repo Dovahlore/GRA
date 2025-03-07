@@ -50,7 +50,9 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
 
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs!")
+        model = model.to(device)
         model = nn.DataParallel(model, device_ids = [0,1])  ## 确保模型在正确的设备上
+
     elif torch.cuda.device_count() == 1:
         model = model.to(device)
 
