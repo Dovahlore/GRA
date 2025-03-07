@@ -46,13 +46,16 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         print(f"可用GPU数量: {num_gpus}")
 
     model = Graphormer(args, num_node_features, num_edge_features)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     if torch.cuda.device_count() > 1:
-        model = torch.nn.DataParallel(model)
+        print(f"Using {torch.cuda.device_count()} GPUs!")
+        model = nn.DataParallel(model, device_ids = [0,1])  ## 确保模型在正确的设备上
+    elif torch.cuda.device_count() == 1:
+        model = model.to(device)
 
 
-    model.to(device)  # 确保模型在正确的设备上
+
 
     torch.cuda.manual_seed(args.seed)  # 设置PyTorch GPU随机种子
 
@@ -77,8 +80,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         #################
          # 训练模式
         train_loss = 0.0  # 一个epoch，所有样本损失总和
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model.to(device)
+
 
         for i, data in tqdm(enumerate(train_loader), total=len(train_loader), desc="Train_Loader"):
             data = data.to(device)  # 确保数据在正确的设备上
@@ -89,6 +91,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
             nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=1.0)
             optimizer.step()
             train_loss += loss.item()
+
         if train_loss/len(train_loader.dataset)<lowest_loss:
             lowest_loss=train_loss/len(train_loader.dataset)
             torch.save(model, 'outputs/%s/best.pth' % args.exp_name)
@@ -104,14 +107,14 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
 def test(args, IO, test_loader):
     """测试模型"""
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
     # 输出内容保存在之前的训练日志里
     IO.cprint('')
     IO.cprint('********** TEST START **********')
     IO.cprint('Reload Best Model')
-    IO.cprint('The current best model is saved in: {}'.format('******** outputs/%s/model.pth *********' % args.exp_name))
+    IO.cprint('The current best model is saved in: {}'.format('******** outputs/%s/best.pth *********' % args.exp_name))
 
     model = torch.load('outputs/%s/model.pth' % args.exp_name).to(device)
     model = model.eval()  # 创建一个新的评估模式的模型对象，不覆盖原模型
