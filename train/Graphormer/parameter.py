@@ -5,7 +5,7 @@
 @Contact: 153765931@qq.com
 @Time: 2024/4/17 20:57
 """
-
+import os
 
 
 
@@ -21,6 +21,7 @@ from texttable import Texttable
 def parse_args():
     parser = argparse.ArgumentParser()  # 参数解析器对象
 
+        # 其他已有参数...
     parser.add_argument('--seed', type=int, default=16, help='Random seed of the experiment')
     parser.add_argument('--exp_name', type=str, default='Exp', help='Name of the experiment')
     parser.add_argument('--train_batch_size', type=int, default=8, help='Size of the training batch')
@@ -29,8 +30,8 @@ def parse_args():
     parser.add_argument('--epochs', type=int, default=200, help='Maximum number of epochs')
     parser.add_argument('--lr', type=float, default=0.0005, help='Learning rate of AdamW')
     parser.add_argument('--num_layers', type=int, default=1, help='Number of Graphormer layers')
-    parser.add_argument('--node_dim', type=int, default=64, help='Hidden dimensions of node features')
-    parser.add_argument('--edge_dim', type=int, default=64, help='Hidden dimensions of edge features')
+    parser.add_argument('--node_dim', type=int, default=128, help='Hidden dimensions of node features')
+    parser.add_argument('--edge_dim', type=int, default=128, help='Hidden dimensions of edge features')
     parser.add_argument('--num_heads', type=int, default=4, help='Number of attention heads')
     parser.add_argument('--output_dim', type=int, default=1, help='Number of output node features')
     parser.add_argument('--max_in_degree', type=int, default=5, help='Max in degree of nodes')

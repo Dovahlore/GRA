@@ -1,7 +1,7 @@
 +-------------------+--------+
 |     Parameter     | Value  |
 +===================+========+
-| Edge dim          | 64     |
+| Edge dim          | 128    |
 +-------------------+--------+
 | Epochs            | 200    |
 +-------------------+--------+
@@ -17,11 +17,11 @@
 +-------------------+--------+
 | Max path distance | 5      |
 +-------------------+--------+
-| Node dim          | 64     |
+| Node dim          | 128    |
 +-------------------+--------+
 | Num heads         | 4      |
 +-------------------+--------+
-| Num layers        | 1      |
+| Num layers        | 3      |
 +-------------------+--------+
 | Output dim        | 1      |
 +-------------------+--------+
@@ -34,7 +34,7 @@
 +-------------------+--------+
 |     Parameter     | Value  |
 +===================+========+
-| Edge dim          | 64     |
+| Edge dim          | 128    |
 +-------------------+--------+
 | Epochs            | 200    |
 +-------------------+--------+
@@ -50,11 +50,11 @@
 +-------------------+--------+
 | Max path distance | 5      |
 +-------------------+--------+
-| Node dim          | 64     |
+| Node dim          | 128    |
 +-------------------+--------+
 | Num heads         | 4      |
 +-------------------+--------+
-| Num layers        | 1      |
+| Num layers        | 3      |
 +-------------------+--------+
 | Output dim        | 1      |
 +-------------------+--------+
@@ -64,37 +64,38 @@
 +-------------------+--------+
 | Train batch size  | 8      |
 +-------------------+--------+
+Using GPU: 1
 Graphormer(
-  (node_in_lin): Linear(in_features=2, out_features=64, bias=True)
-  (edge_in_lin): Linear(in_features=1, out_features=64, bias=True)
+  (node_in_lin): Linear(in_features=2, out_features=128, bias=True)
+  (edge_in_lin): Linear(in_features=1, out_features=128, bias=True)
   (centrality_encoding): CentralityEncoding()
   (spatial_encoding): SpatialEncoding()
   (layers): ModuleList(
-    (0): GraphormerEncoderLayer(
+    (0-2): 3 x GraphormerEncoderLayer(
       (attention): GraphormerMultiHeadAttention(
         (heads): ModuleList(
           (0-3): 4 x GraphormerAttentionHead(
             (edge_encoding): EdgeEncoding()
-            (q): Linear(in_features=64, out_features=64, bias=True)
-            (k): Linear(in_features=64, out_features=64, bias=True)
-            (v): Linear(in_features=64, out_features=64, bias=True)
+            (q): Linear(in_features=128, out_features=128, bias=True)
+            (k): Linear(in_features=128, out_features=128, bias=True)
+            (v): Linear(in_features=128, out_features=128, bias=True)
           )
         )
-        (linear): Linear(in_features=256, out_features=64, bias=True)
+        (linear): Linear(in_features=512, out_features=128, bias=True)
       )
-      (ln_1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ln_2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ff): Linear(in_features=64, out_features=64, bias=True)
+      (ln_1): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+      (ln_2): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+      (ff): Linear(in_features=128, out_features=128, bias=True)
     )
   )
-  (node_out_lin): Linear(in_features=64, out_features=1, bias=True)
+  (node_out_lin): Linear(in_features=128, out_features=1, bias=True)
 )
-Model Parameter: 73094
+Model Parameter: 852230
 Using AdamW
 +-------------------+--------+
 |     Parameter     | Value  |
 +===================+========+
-| Edge dim          | 64     |
+| Edge dim          | 128    |
 +-------------------+--------+
 | Epochs            | 200    |
 +-------------------+--------+
@@ -110,11 +111,11 @@ Using AdamW
 +-------------------+--------+
 | Max path distance | 5      |
 +-------------------+--------+
-| Node dim          | 64     |
+| Node dim          | 128    |
 +-------------------+--------+
 | Num heads         | 4      |
 +-------------------+--------+
-| Num layers        | 1      |
+| Num layers        | 3      |
 +-------------------+--------+
 | Output dim        | 1      |
 +-------------------+--------+
@@ -127,7 +128,7 @@ Using AdamW
 +-------------------+--------+
 |     Parameter     | Value  |
 +===================+========+
-| Edge dim          | 64     |
+| Edge dim          | 128    |
 +-------------------+--------+
 | Epochs            | 200    |
 +-------------------+--------+
@@ -143,11 +144,11 @@ Using AdamW
 +-------------------+--------+
 | Max path distance | 5      |
 +-------------------+--------+
-| Node dim          | 64     |
+| Node dim          | 128    |
 +-------------------+--------+
 | Num heads         | 4      |
 +-------------------+--------+
-| Num layers        | 1      |
+| Num layers        | 3      |
 +-------------------+--------+
 | Output dim        | 1      |
 +-------------------+--------+
@@ -157,216 +158,31 @@ Using AdamW
 +-------------------+--------+
 | Train batch size  | 8      |
 +-------------------+--------+
+Using GPU: 1
 Graphormer(
-  (node_in_lin): Linear(in_features=2, out_features=64, bias=True)
-  (edge_in_lin): Linear(in_features=1, out_features=64, bias=True)
+  (node_in_lin): Linear(in_features=2, out_features=128, bias=True)
+  (edge_in_lin): Linear(in_features=1, out_features=128, bias=True)
   (centrality_encoding): CentralityEncoding()
   (spatial_encoding): SpatialEncoding()
   (layers): ModuleList(
-    (0): GraphormerEncoderLayer(
+    (0-2): 3 x GraphormerEncoderLayer(
       (attention): GraphormerMultiHeadAttention(
         (heads): ModuleList(
           (0-3): 4 x GraphormerAttentionHead(
             (edge_encoding): EdgeEncoding()
-            (q): Linear(in_features=64, out_features=64, bias=True)
-            (k): Linear(in_features=64, out_features=64, bias=True)
-            (v): Linear(in_features=64, out_features=64, bias=True)
+            (q): Linear(in_features=128, out_features=128, bias=True)
+            (k): Linear(in_features=128, out_features=128, bias=True)
+            (v): Linear(in_features=128, out_features=128, bias=True)
           )
         )
-        (linear): Linear(in_features=256, out_features=64, bias=True)
+        (linear): Linear(in_features=512, out_features=128, bias=True)
       )
-      (ln_1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ln_2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ff): Linear(in_features=64, out_features=64, bias=True)
+      (ln_1): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+      (ln_2): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+      (ff): Linear(in_features=128, out_features=128, bias=True)
     )
   )
-  (node_out_lin): Linear(in_features=64, out_features=1, bias=True)
+  (node_out_lin): Linear(in_features=128, out_features=1, bias=True)
 )
-Model Parameter: 73094
-Using AdamW
-+-------------------+--------+
-|     Parameter     | Value  |
-+===================+========+
-| Edge dim          | 64     |
-+-------------------+--------+
-| Epochs            | 200    |
-+-------------------+--------+
-| Exp name          | Exp    |
-+-------------------+--------+
-| Gpu index         | 1      |
-+-------------------+--------+
-| Lr                | 0.0005 |
-+-------------------+--------+
-| Max in degree     | 5      |
-+-------------------+--------+
-| Max out degree    | 5      |
-+-------------------+--------+
-| Max path distance | 5      |
-+-------------------+--------+
-| Node dim          | 64     |
-+-------------------+--------+
-| Num heads         | 4      |
-+-------------------+--------+
-| Num layers        | 1      |
-+-------------------+--------+
-| Output dim        | 1      |
-+-------------------+--------+
-| Seed              | 16     |
-+-------------------+--------+
-| Test batch size   | 8      |
-+-------------------+--------+
-| Train batch size  | 8      |
-+-------------------+--------+
-+-------------------+--------+
-|     Parameter     | Value  |
-+===================+========+
-| Edge dim          | 64     |
-+-------------------+--------+
-| Epochs            | 200    |
-+-------------------+--------+
-| Exp name          | Exp    |
-+-------------------+--------+
-| Gpu index         | 1      |
-+-------------------+--------+
-| Lr                | 0.0005 |
-+-------------------+--------+
-| Max in degree     | 5      |
-+-------------------+--------+
-| Max out degree    | 5      |
-+-------------------+--------+
-| Max path distance | 5      |
-+-------------------+--------+
-| Node dim          | 64     |
-+-------------------+--------+
-| Num heads         | 4      |
-+-------------------+--------+
-| Num layers        | 1      |
-+-------------------+--------+
-| Output dim        | 1      |
-+-------------------+--------+
-| Seed              | 16     |
-+-------------------+--------+
-| Test batch size   | 8      |
-+-------------------+--------+
-| Train batch size  | 8      |
-+-------------------+--------+
-Graphormer(
-  (node_in_lin): Linear(in_features=2, out_features=64, bias=True)
-  (edge_in_lin): Linear(in_features=1, out_features=64, bias=True)
-  (centrality_encoding): CentralityEncoding()
-  (spatial_encoding): SpatialEncoding()
-  (layers): ModuleList(
-    (0): GraphormerEncoderLayer(
-      (attention): GraphormerMultiHeadAttention(
-        (heads): ModuleList(
-          (0-3): 4 x GraphormerAttentionHead(
-            (edge_encoding): EdgeEncoding()
-            (q): Linear(in_features=64, out_features=64, bias=True)
-            (k): Linear(in_features=64, out_features=64, bias=True)
-            (v): Linear(in_features=64, out_features=64, bias=True)
-          )
-        )
-        (linear): Linear(in_features=256, out_features=64, bias=True)
-      )
-      (ln_1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ln_2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ff): Linear(in_features=64, out_features=64, bias=True)
-    )
-  )
-  (node_out_lin): Linear(in_features=64, out_features=1, bias=True)
-)
-Model Parameter: 73094
-Using AdamW
-+-------------------+--------+
-|     Parameter     | Value  |
-+===================+========+
-| Edge dim          | 64     |
-+-------------------+--------+
-| Epochs            | 200    |
-+-------------------+--------+
-| Exp name          | Exp    |
-+-------------------+--------+
-| Gpu index         | 1      |
-+-------------------+--------+
-| Lr                | 0.0005 |
-+-------------------+--------+
-| Max in degree     | 5      |
-+-------------------+--------+
-| Max out degree    | 5      |
-+-------------------+--------+
-| Max path distance | 5      |
-+-------------------+--------+
-| Node dim          | 64     |
-+-------------------+--------+
-| Num heads         | 4      |
-+-------------------+--------+
-| Num layers        | 1      |
-+-------------------+--------+
-| Output dim        | 1      |
-+-------------------+--------+
-| Seed              | 16     |
-+-------------------+--------+
-| Test batch size   | 8      |
-+-------------------+--------+
-| Train batch size  | 8      |
-+-------------------+--------+
-+-------------------+--------+
-|     Parameter     | Value  |
-+===================+========+
-| Edge dim          | 64     |
-+-------------------+--------+
-| Epochs            | 200    |
-+-------------------+--------+
-| Exp name          | Exp    |
-+-------------------+--------+
-| Gpu index         | 1      |
-+-------------------+--------+
-| Lr                | 0.0005 |
-+-------------------+--------+
-| Max in degree     | 5      |
-+-------------------+--------+
-| Max out degree    | 5      |
-+-------------------+--------+
-| Max path distance | 5      |
-+-------------------+--------+
-| Node dim          | 64     |
-+-------------------+--------+
-| Num heads         | 4      |
-+-------------------+--------+
-| Num layers        | 1      |
-+-------------------+--------+
-| Output dim        | 1      |
-+-------------------+--------+
-| Seed              | 16     |
-+-------------------+--------+
-| Test batch size   | 8      |
-+-------------------+--------+
-| Train batch size  | 8      |
-+-------------------+--------+
-Graphormer(
-  (node_in_lin): Linear(in_features=2, out_features=64, bias=True)
-  (edge_in_lin): Linear(in_features=1, out_features=64, bias=True)
-  (centrality_encoding): CentralityEncoding()
-  (spatial_encoding): SpatialEncoding()
-  (layers): ModuleList(
-    (0): GraphormerEncoderLayer(
-      (attention): GraphormerMultiHeadAttention(
-        (heads): ModuleList(
-          (0-3): 4 x GraphormerAttentionHead(
-            (edge_encoding): EdgeEncoding()
-            (q): Linear(in_features=64, out_features=64, bias=True)
-            (k): Linear(in_features=64, out_features=64, bias=True)
-            (v): Linear(in_features=64, out_features=64, bias=True)
-          )
-        )
-        (linear): Linear(in_features=256, out_features=64, bias=True)
-      )
-      (ln_1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ln_2): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
-      (ff): Linear(in_features=64, out_features=64, bias=True)
-    )
-  )
-  (node_out_lin): Linear(in_features=64, out_features=1, bias=True)
-)
-Model Parameter: 73094
+Model Parameter: 852230
 Using AdamW

@@ -1,12 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-@Author: XiaShan
-@Contact: 153765931@qq.com
-@Time: 2024/4/17 20:41
-"""
+
 from typing import Union, Tuple, Dict, List
-import os
 
 # 指定工作目录
 
@@ -14,7 +7,7 @@ import torch
 import networkx as nx
 from torch import nn
 from torch_geometric.data import Data
-from torch_geometric.nn import global_mean_pool
+
 from torch_geometric.utils.convert import to_networkx
 
 from Graphormer.layer import GraphormerEncoderLayer, CentralityEncoding, SpatialEncoding
@@ -150,7 +143,9 @@ class Graphormer(nn.Module):
 
         if type(data) == Data:
             ptr = None
-            node_paths, edge_paths = shortest_path_distance(data)
+            print("single graph")
+            node_paths=data.node_paths
+            edge_paths=data.edge_paths
         else:
             ptr = data.ptr
             node_paths, edge_paths = batched_shortest_path_distance(data)
@@ -159,10 +154,15 @@ class Graphormer(nn.Module):
         edge_attr = self.edge_in_lin(edge_attr)
 
         x = self.centrality_encoding(x, edge_index)
+
         b = self.spatial_encoding(x, node_paths)
 
+
+
         for layer in self.layers:
+
             x = layer(x, edge_attr, b, edge_paths, ptr)
+
 
         x = self.node_out_lin(x)
 

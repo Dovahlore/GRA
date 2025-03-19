@@ -1,0 +1,62 @@
++------------------+-------------------------------------+
+|    Parameter     |                Value                |
++==================+=====================================+
+| Dataset          | ./Datasets/CustomGraphDatasetmix600 |
++------------------+-------------------------------------+
+| Epochs           | 20000                               |
++------------------+-------------------------------------+
+| Exp name         | Exp                                 |
++------------------+-------------------------------------+
+| Gpu index        | 1                                   |
++------------------+-------------------------------------+
+| Hidden dim       | 512                                 |
++------------------+-------------------------------------+
+| Lr               | 0.0001                              |
++------------------+-------------------------------------+
+| Num layers       | 5                                   |
++------------------+-------------------------------------+
+| Output dim       | 256                                 |
++------------------+-------------------------------------+
+| Seed             | 16                                  |
++------------------+-------------------------------------+
+| Test batch size  | 8                                   |
++------------------+-------------------------------------+
+| Train batch size | 16                                  |
++------------------+-------------------------------------+
+Let's use 2 GPUs!
+Running DDP on rank 0.
+Running DDP on rank 1.
+W0314 16:33:52.092984 140587907368768 torch/multiprocessing/spawn.py:146] Terminating process 2186372 via signal SIGTERM
+Traceback (most recent call last):
+  File "./GNNtrain.py", line 113, in <module>
+    main()
+  File "./GNNtrain.py", line 109, in main
+    mp.spawn(train, args=(world_size, args), nprocs=world_size, join=True)
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/multiprocessing/spawn.py", line 282, in spawn
+    return start_processes(fn, args, nprocs, join, daemon, start_method="spawn")
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/multiprocessing/spawn.py", line 238, in start_processes
+    while not context.join():
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/multiprocessing/spawn.py", line 189, in join
+    raise ProcessRaisedException(msg, error_index, failed_process.pid)
+torch.multiprocessing.spawn.ProcessRaisedException: 
+
+-- Process 0 terminated with the following error:
+Traceback (most recent call last):
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/multiprocessing/spawn.py", line 76, in _wrap
+    fn(i, *args)
+  File "/home/myq/文档/simulation-master/train/GNNtrain.py", line 48, in train
+    setup(rank, world_size)
+  File "/home/myq/文档/simulation-master/train/GNNtrain.py", line 28, in setup
+    dist.init_process_group("nccl", rank=rank, world_size=world_size)
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/distributed/c10d_logger.py", line 79, in wrapper
+    return func(*args, **kwargs)
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/distributed/c10d_logger.py", line 93, in wrapper
+    func_return = func(*args, **kwargs)
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/distributed/distributed_c10d.py", line 1361, in init_process_group
+    store, rank, world_size = next(rendezvous_iterator)
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/distributed/rendezvous.py", line 258, in _env_rendezvous_handler
+    store = _create_c10d_store(master_addr, master_port, rank, world_size, timeout, use_libuv)
+  File "/home/myq/.local/lib/python3.8/site-packages/torch/distributed/rendezvous.py", line 185, in _create_c10d_store
+    return TCPStore(
+RuntimeError: The server socket has failed to listen on any local network address. useIpv6: 0, code: -98, name: EADDRINUSE, message: address already in use
+

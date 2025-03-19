@@ -26,7 +26,7 @@ from dataset  import CustomGraphDataset
 
 
 def load_dataset(args):
-    dataset = CustomGraphDataset(root='./Datasets/CustomGraphDataset49')
+    dataset = CustomGraphDataset(root='./train/Datasets/CustomGraphDataset100')
 
     print(f"Dataset Size: {len(dataset)}")
     if len(dataset) == 0:
@@ -169,8 +169,7 @@ if __name__ == '__main__':
 
     IO = IOStream('outputs/' + args.exp_name + '/run.log')
     IO.cprint(str(table_printer(args)))  # 参数可视化
-    IO = IOStream('outputs/' + args.exp_name + '/run.log')
-    IO.cprint(str(table_printer(args)))  # 参数可视化
+
 
     train_loader, test_loader, num_node_features, num_edge_features = load_dataset(args)
 

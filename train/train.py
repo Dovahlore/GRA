@@ -26,17 +26,15 @@ from dataset import CustomGraphDataset
 
 
 def load_dataset(args):
-    dataset = CustomGraphDataset(root='Datasets/CustomGraphDataset49')
+    dataset = CustomGraphDataset(root='Datasets/CustomGraphDatasetmix')
 
     print(f"Dataset Size: {len(dataset)}")
     if len(dataset) == 0:
         raise ValueError("Dataset is empty. Please check the dataset path and format.")
 
-    print("Sample Data Example:", dataset[0])  # 打印第一个样本，确保数据格式正确
-
     train_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=True, num_workers=6)
     test_loader = DataLoader(dataset, batch_size=args.train_batch_size, shuffle=False, num_workers=6)
-
+    print("Train_Loader :", [batchs for batchs in train_loader])
     return train_loader, test_loader, dataset.num_node_features, dataset.num_edge_features
 def train(args, IO, train_loader, num_node_features, num_edge_features):
     # 使用GPU or CPU
@@ -77,6 +75,7 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
         model.to(device)
 
         for i, data in tqdm(enumerate(train_loader), total=len(train_loader), desc="Train_Loader"):
+            print(type(data))
             data = data.to(device)  # 确保数据在正确的设备上
             optimizer.zero_grad()
             outputs = model(data)  # 前向传播
@@ -124,6 +123,7 @@ def test(args, IO, test_loader):
     criterion = nn.L1Loss(reduction="sum")
 
     for i, data in tqdm(enumerate(test_loader), total=len(test_loader), desc="Test_Loader"):
+
         data = data.to(device)
         with torch.no_grad():
             outputs = model(data)

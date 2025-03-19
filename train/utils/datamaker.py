@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 from sympy.codegen.cnodes import sizeof
 array=[[],[]]
-k=7
+k=35
 for i in range(k):
     for j in range(k):
         if i-1>=0:#上
@@ -29,7 +29,7 @@ for i in range(k):
 
 adj=torch.tensor(array)
 
-pickle.dump(adj,open('../edge_index.pkl','wb'))
+pickle.dump(adj,open('../edge_index%d.pkl'%k,'wb'))
 
 
 

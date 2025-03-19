@@ -64,10 +64,7 @@ class SpatialEncoding(nn.Module):
         :param paths: pairwise node paths
         :return: torch.Tensor, spatial Encoding matrix
         """
-        # 确保 self.b 在 GPU 上
-        # 确保 max_path_distance 在 GPU 上
-        spatial_matrix = torch.zeros((x.shape[0], x.shape[0]), device=x.device)
- # (num_nodes, num_nodes)
+        spatial_matrix = torch.zeros((x.shape[0], x.shape[0])).to(next(self.parameters()).device) # (num_nodes, num_nodes)
 
         for src in paths:
             for dst in paths[src]:
@@ -93,8 +90,7 @@ class EdgeEncoding(nn.Module):
         :param edge_paths: pairwise node paths in edge indexes
         :return: torch.Tensor, Edge Encoding matrix
         """
-
-        cij = torch.zeros((x.shape[0], x.shape[0]), device=x.device)
+        cij = torch.zeros((x.shape[0], x.shape[0])).to(next(self.parameters()).device)
 
         for src in edge_paths:
             for dst in edge_paths[src]:
@@ -142,11 +138,11 @@ class GraphormerAttentionHead(nn.Module):
         :param ptr: batch pointer that shows graph indexes in batch of graphs
         :return: torch.Tensor, node embeddings after attention operation
         """
-        batch_mask_neg_inf = torch.full(size=(x.shape[0], x.shape[0]), fill_value=-1e6,device=x.device)
-        batch_mask_zeros = torch.zeros(size=(x.shape[0], x.shape[0]),device=x.device)
+        batch_mask_neg_inf = torch.full(size=(x.shape[0], x.shape[0]), fill_value=-1e6).to(next(self.parameters()).device)
+        batch_mask_zeros = torch.zeros(size=(x.shape[0], x.shape[0])).to(next(self.parameters()).device)
 
         if type(ptr) == type(None):
-            batch_mask_neg_inf = torch.ones(size=(x.shape[0], x.shape[0]),device=x.device)
+            batch_mask_neg_inf = torch.ones(size=(x.shape[0], x.shape[0])).to(next(self.parameters()).device)
             batch_mask_zeros += 1
         else:
             # 批图的mask,邻接矩阵以对角阵组合
